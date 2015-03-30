@@ -13,7 +13,7 @@ class VelocityEstimator {
         /*********HACK***********/
         if(std::abs(val)>overflow_) {
             const double tmp = last_val_;
-            last_val_ = 0
+            last_val_ = 0;
             return tmp;
         }
         
