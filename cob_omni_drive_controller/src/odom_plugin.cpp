@@ -16,11 +16,11 @@ namespace cob_omni_drive_controller
 // this controller gets access to the JointStateInterface
 class OdometryController: public GeomController<hardware_interface::JointStateInterface, UndercarriageGeom>
 {
+   bool init_;
 public:
-    OdometryController() {}
+    OdometryController():init_(false) {}
 
     virtual bool init(hardware_interface::JointStateInterface* hw, ros::NodeHandle &root_nh, ros::NodeHandle& controller_nh){
-
         if(!GeomController::init(hw, controller_nh)) return false;
 
         double publish_rate;
@@ -51,8 +51,11 @@ public:
         return true;
   }
     virtual void starting(const ros::Time& time){
-        GeomController::reset();
-        odom_tracker_->init(time);
+        if(!init_) {
+            GeomController::reset();
+            odom_tracker_->init(time);
+            init_ = true;
+        }
     }
     virtual void update(const ros::Time& time, const ros::Duration& duration){
         double period = duration.toSec();
